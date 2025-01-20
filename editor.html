@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta name="theme-color" content="#000000">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-title" content="Grid Golf">
+        <meta name="description" content="A small golf board game">
+        <title>Grid Golf - Editor</title>
+        <link rel="icon" type="image/svg" href="/favicon.svg">
+        <link rel="apple-touch-icon" href="icon-172x172.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="icon-180x180.png">
+        <link rel="stylesheet" href="editor.css">
+        <link rel="manifest" href="manifest.json">
+        <script src="js/enums.js"></script>
+        <script src="js/tile.js"></script>
+        <script src="js/course.js"></script>
+        <script src="js/editor.js"></script>
+    </head>
+    <body>
+        <audio autoplay loop>
+            <source src="music/background.mp3" type="audio/mpeg">
+           </audio>
+        <canvas id="editorCanvas"></canvas>
+        <div class="controlsFile">
+            <button onclick="dispose()">
+                <svg fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 456 511.82"><path fill="#FD3B3B" d="M48.42 140.13h361.99c17.36 0 29.82 9.78 28.08 28.17l-30.73 317.1c-1.23 13.36-8.99 26.42-25.3 26.42H76.34c-13.63-.73-23.74-9.75-25.09-24.14L20.79 168.99c-1.74-18.38 9.75-28.86 27.63-28.86zM24.49 38.15h136.47V28.1c0-15.94 10.2-28.1 27.02-28.1h81.28c17.3 0 27.65 11.77 27.65 28.01v10.14h138.66c.57 0 1.11.07 1.68.13 10.23.93 18.15 9.02 18.69 19.22.03.79.06 1.39.06 2.17v42.76c0 5.99-4.73 10.89-10.62 11.19-.54 0-1.09.03-1.63.03H11.22c-5.92 0-10.77-4.6-11.19-10.38 0-.72-.03-1.47-.03-2.23v-39.5c0-10.93 4.21-20.71 16.82-23.02 2.53-.45 5.09-.37 7.67-.37zm83.78 208.38c-.51-10.17 8.21-18.83 19.53-19.31 11.31-.49 20.94 7.4 21.45 17.57l8.7 160.62c.51 10.18-8.22 18.84-19.53 19.32-11.32.48-20.94-7.4-21.46-17.57l-8.69-160.63zm201.7-1.74c.51-10.17 10.14-18.06 21.45-17.57 11.32.48 20.04 9.14 19.53 19.31l-8.66 160.63c-.52 10.17-10.14 18.05-21.46 17.57-11.31-.48-20.04-9.14-19.53-19.32l8.67-160.62zm-102.94.87c0-10.23 9.23-18.53 20.58-18.53 11.34 0 20.58 8.3 20.58 18.53v160.63c0 10.23-9.24 18.53-20.58 18.53-11.35 0-20.58-8.3-20.58-18.53V245.66z"/></svg><br />
+                Delete</button>
+            <button onclick="saveData()">
+                <svg clip-rule="evenodd" fill-rule="evenodd" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient gradientUnits="userSpaceOnUse" id="a" x1="249.999" x2="249.999" y1="30.694" y2="470.692"><stop offset="0" stop-color="#008BFF"/><stop offset="1" stop-color="#0af"/></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="b" x1="284.421" x2="215.575" y1="130.457" y2="70.929"><stop offset="0" stop-color="#EBECEC"/><stop offset="1" stop-color="#FEFEFE"/></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="c" x1="249.997" x2="249.997" y1="448.641" y2="272.235"><stop offset="0" stop-color="#EBECEC"/><stop offset="1" stop-color="#FEFEFE"/></linearGradient></defs><g><path d="M55 31h365l50 50v365c0 13-11 25-25 25h-390c-14 0-25-12-25-25v-390c0-14 11-25 25-25z" fill="url(#a)" stroke="#434242" stroke-linejoin="round" stroke-width="10"/><path d="M110 31h280v125c0 8-7 15-15 15h-250c-8 0-15-7-15-15v-125z" fill="url(#b)" stroke="#434242" stroke-linejoin="round" stroke-width="10"/><rect fill="url(#c)" height="221" stroke="#434242" stroke-linejoin="round" stroke-width="10" width="320" x="90" y="250"/><path d="M290 29h70v102c0 2-2 5-5 5h-60c-3 0-5-3-5-5v-102z" fill="#434242"/><line fill="none" stroke="#434242" stroke-linecap="round" stroke-width="15" x1="370" x2="130" y1="295" y2="295"/><line fill="none" stroke="#434242" stroke-linecap="round" stroke-width="15" x1="370" x2="130" y1="335" y2="335"/><line fill="none" stroke="#434242" stroke-linecap="round" stroke-width="15" x1="370" x2="130" y1="375" y2="375"/><line fill="none" stroke="#434242" stroke-linecap="round" stroke-width="15" x1="370" x2="130" y1="415" y2="415"/></g></svg><br />
+                Save</button>
+            <button onclick="loadData()">
+                <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" enable-background="new 0 0 48 48">
+                    <path fill="#FFA000" d="M40,12H22l-4-4H8c-2.2,0-4,1.8-4,4v8h40v-4C44,13.8,42.2,12,40,12z"/>
+                    <path fill="#FFCA28" d="M40,12H8c-2.2,0-4,1.8-4,4v20c0,2.2,1.8,4,4,4h32c2.2,0,4-1.8,4-4V16C44,13.8,42.2,12,40,12z"/>
+                </svg><br />
+                Load
+            </button>
+            <button onclick="exportData()">
+                <svg viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <polygon fill="black" points="24,10 18,24 30,24" />
+                    <rect fill="black" height="5" rx="2" ry="2" width="24" x="12" y="35" />
+                    <rect fill="black" height="11" width="4" x="22" y="24" />
+                </svg>
+                <br />
+                Export
+            </button>
+            <button onclick="testCourse()">
+                <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="12,0 40,24 12,47" fill="black"/>
+                </svg><br />
+                Test
+            </button>
+        </div>
+        <div class="controlsDraw">   
+            <button id="btnRough" onclick="setMode(GroundType.Rough)">
+                <svg width="20" height="20">
+                    <rect width="20" height="20" fill="#3A6E3A" />
+                </svg><br />
+                Rough
+            </button>
+            <button id="btnBunker" onclick="setMode(GroundType.Bunker)">
+                <svg width="20" height="20">
+                    <rect width="20" height="20" fill="#FFFF99" />
+                </svg><br />
+                Bunker
+            </button>
+            <button id="btnFairway" onclick="setMode(GroundType.Fairway)">
+                <svg width="20" height="20">
+                    <rect width="20" height="20" fill="#679553" />
+                </svg><br />
+                Fairway
+            </button>
+            <button id="btnForest" onclick="setMode(GroundType.Forest)">
+                <svg width="20" height="20">
+                    <rect width="20" height="20" fill="#00ff00" />
+                    <rect x="8" y="10" width="4" height="10" fill="brown" />
+                    <circle cx="5" cy="10" r="5" fill="green" />
+                    <circle cx="15" cy="7" r="5" fill="green" />
+                    <circle cx="9" cy="4" r="5" fill="green" />
+                </svg><br />
+                Forest
+            </button>
+            <button id="btnWater" onclick="setMode(GroundType.Water)">
+                <svg width="20" height="20">
+                    <rect width="20" height="20" fill="#088CD1" />
+                </svg><br />
+                Water
+            </button>
+            <button id="btnGreen" onclick="setMode(GroundType.Green)">
+                <svg width="20" height="20">
+                    <rect width="20" height="20" fill="#C3D7A4" />
+                </svg><br />
+                Green
+            </button>
+            <button id="btnHole" onclick="setMode(GroundType.Hole)">
+                <svg width="20" height="20">
+                    <rect width="20" height="20" fill="#C3D7A4" />
+                    <circle cx="10" cy="15" r="5" fill="black" />
+                    <rect x="8" y="0" width="4" height="20" fill="brown" />
+                    <polygon points="10,0 20,5 10,10" fill="red" />
+                </svg><br />
+                Hole
+            </button>
+            <button id="btnTee" onclick="setMode(GroundType.Tee)">
+                <svg width="20" height="20">
+                    <rect width="20" height="20" fill="#679553" />
+                    <circle cx="10" cy="10" r="5" fill="white" />
+                </svg><br />
+                Tee
+            </button>
+       </div>
+       <div id="exportJsonContainer" style="display: none;">
+            <textarea id="exportJson" readonly style="position:absolute; left:0px; top:0px; width: 100vh; height: 94vh;"></textarea>
+            <button style="position:absolute; bottom:0px; right:6vh;" onclick="copyToClipboard()">📋</button>
+            <button style="position:absolute; bottom:0px; right:0px;" onclick="document.getElementById('exportJsonContainer').style.display = 'none';">Close</button>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,42 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: black;
+}
+
+canvas {
+    display: block;
+}
+
+.controlsFile {
+    position :absolute;
+    bottom: 1vh;
+}
+
+.controlsDraw {
+    position :absolute;
+    bottom: 7vh;
+}
+
+button {
+    display: inline-block;
+    background-color: white;
+    font-size: 1vh;
+    border: none;
+    border-radius: 1vh;
+    cursor: pointer;
+    width: 5vh;
+    height: 5vh;
+}
+
+button svg {
+    width: 2vh;
+    height: 2vh;
+}
+
+input[type="file"] {
+    display: none;
+}

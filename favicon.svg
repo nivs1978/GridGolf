@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   viewBox="0 0 200 200"
+   version="1.1">
+  <rect
+     style="fill:#00c800;stroke-width:7.55906;fill-opacity:1"
+     id="rect866"
+     width="200.88524"
+     height="200.59744"
+     x="0"
+     y="0" />
+  <ellipse
+     cx="101.44023"
+     cy="191.69347"
+     rx="19.058306"
+     ry="6.6704073"
+     fill="white"
+     id="ellipse6"
+     style="fill:#c26833;fill-opacity:1;stroke-width:0.476458" />
+  <path
+     style="fill:#ffffff;stroke-width:0.476458"
+     d="m 83.673063,194.13788 c 9.408681,-6.44541 28.829667,-6.22272 35.588977,0.0886 -7.22995,5.6167 -29.098899,5.5124 -35.588977,-0.0886 z"
+     id="path834" />
+  <rect
+     x="98.785202"
+     y="5.3677621"
+     width="5.0079546"
+     height="192.80626"
+     fill="#ffa500"
+     id="rect8"
+     style="stroke-width:1.41516" />
+  <polygon
+     id="flag"
+     points="52,10 60,9.2116694 65,8.1126932 70,9.5372288 75,11.387234 80,11.961823 85,10.732721 90,8.8299585 90,38.002927 85,38.829958 80,40.732721 75,41.961823 70,41.387234 65,39.537229 60,39.056347 52,40 "
+     fill="#ff0000"
+     transform="matrix(1.2519887,0,0,1.2519887,38.689744,-7.1521236)" />
+  <circle
+     style="fill:#ffffff;fill-opacity:1;stroke-width:9.46386"
+     id="path990"
+     cx="57.994495"
+     cy="163.28705"
+     r="8.2037992" />
+</svg>
