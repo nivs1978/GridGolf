@@ -62,50 +62,66 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <script src="js/enums.js"></script>
-    <script src="js/options.js"></script>
+    <script src="js/settings.js"></script>
     <script src="js/tile.js"></script>
     <script src="js/coursedata.js"></script>
     <script src="js/course.js"></script>
     <script src="js/dice.js"></script>
     <script src="js/animatedbackground.js"></script>
+    <script src="js/language.js"></script>
     <script src="js/main.js"></script>
 </head>
 <body>
-    <div id="gameInfo" style="display: none;"><div style="float:left">Hole: <span id="holeNumber">1</span></div><div style="float: right">Player: <span id="player"></span></div></div><br />
-    <canvas id="gameCanvas" style="display: none" onclick="handleCanvasClick(event)"></canvas>
-    <div id="gameDetails" class="gameDetails" style="display:none">
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <div>Stroke: <span id="stroke">1</span></div>
-            <div id="diceContainer" style="text-align: center;">
-                <svg id="dice1" viewBox="0 0 100 100" width="4vh" height="4vh">
-                    <rect width="100" height="100" rx="15" ry="15" fill="white" stroke="black" stroke-width="5"/>
-                    <circle id="dot1" cx="50" cy="50" r="8" fill="black"/>
-                    <circle id="dot2" cx="20" cy="20" r="8" fill="black"/>
-                    <circle id="dot3" cx="80" cy="20" r="8" fill="black"/>
-                    <circle id="dot4" cx="20" cy="80" r="8" fill="black"/>
-                    <circle id="dot5" cx="80" cy="80" r="8" fill="black"/>
-                    <circle id="dot6" cx="20" cy="50" r="8" fill="black"/>
-                    <circle id="dot7" cx="80" cy="50" r="8" fill="black"/>
-                </svg>
+    <div class="gameContainer">
+        <div id="gameInfo" style="display: none;"><div style="float:left"><span id="holeNumberLabel">Hole</span>: <span id="holeNumber">1</span></div><div style="float: right"><span id="playerLabel">Player</span>: <span id="player"></span></div></div>
+        <canvas id="gameCanvas" style="display: none" onclick="handleCanvasClick(event)"></canvas>
+        <div id="gameDetails" style="display:none">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="width:50%"><span id="strokeLabel">Stroke</span>: <span id="stroke">1</span></div>
+                <div id="diceContainer" style="text-align: center; width:20%">
+                    <svg id="dice1" viewBox="0 0 100 100" width="4vh" height="4vh">
+                        <rect width="100" height="100" rx="15" ry="15" fill="white" stroke="black" stroke-width="5"/>
+                        <circle id="dot1" cx="50" cy="50" r="8" fill="black"/>
+                        <circle id="dot2" cx="20" cy="20" r="8" fill="black"/>
+                        <circle id="dot3" cx="80" cy="20" r="8" fill="black"/>
+                        <circle id="dot4" cx="20" cy="80" r="8" fill="black"/>
+                        <circle id="dot5" cx="80" cy="80" r="8" fill="black"/>
+                        <circle id="dot6" cx="20" cy="50" r="8" fill="black"/>
+                        <circle id="dot7" cx="80" cy="50" r="8" fill="black"/>
+                    </svg>
+                </div>
+                <span id="penaltyOrBonus" style="width:20%">+1</span>
+                <div id="clubs" style="width: 10%;">
+                    <img src="graphics/driver.svg" id="iconDriver" class="club" style="display: none; width: 3vh; height: 3vh;" />
+                    <img src="graphics/iron.svg" id="iconIron" class="club" style="display: none; width: 3vh; height: 3vh;" />
+                    <img src="graphics/wedge.svg" id="iconWedge" class="club" style="display: none; width: 3vh; height: 3vh;" />
+                    <img src="graphics/putter.svg" id="iconPutter" class="club" style="display: none; width: 3vh; height: 3vh;" />
+                </div>
+                <div style="width:40%">&nbsp;</div>
             </div>
-            <span id="penaltyOrBonus">+1</span>
-            <div id="clubs">
-                <img src="graphics/driver.svg" id="iconDriver" class="club" style="display: none; width: 3vh; height: 3vh;" />
-                <img src="graphics/iron.svg" id="iconIron" class="club" style="display: none; width: 3vh; height: 3vh;" />
-                <img src="graphics/wedge.svg" id="iconWedge" class="club" style="display: none; width: 3vh; height: 3vh;" />
-                <img src="graphics/putter.svg" id="iconPutter" class="club" style="display: none; width: 3vh; height: 3vh;" />
-            </div>
-            <div>Score: <span id="score">0</span></div>
         </div>
     </div>
     <div id="animatedBackgroundContainer"></div>
+    <div id="installPwa" class="help" style="display: none;">
+        <h2 id="installPwaHeadline"></h2>
+        <p id="installPwaText"></p>
+        <button id="closeInstallButton" class="button" onclick="hideInstall()">Close</button>
+    </div>
+    <div id="helpMenu" class="help" style="display: none;">
+        <p id="helpText1">The golf board game where the dice determine the length of your shot, and you control the direction.</p>
+        <p id="helpText2">After rolling the dice, choose the destination of the golf ball. You start at the tee and, for each shot, move the ball either straight or diagonally a number of tiles equal to the roll.
+        Different surfaces apply bonuses or penalties that modify the dice roll to determine the final distance. If the adjusted distance is 0 or less, you miss the ball, and it still counts as a shot.
+        Water and forest tiles are invalid and cannot be landed on. The green sourounding the flag also give your the option of a short 1 tile safe shot.</p>
+        <p id="helpText3">The goal is to reach the golf hole, marked by the flag, in the fewest number of shots.</p>
+        <button id="closeHelpButton" class="button" onclick="hideHelp()">Close</button>
+    </div>
     <div id="menu" class="menu">
-        <img id="scoreboardTitle" src="graphics/gridgolf.png" style="width:100%; margin-bottom:4vh;">
-        <table id="scoreTable" style="display:none; margin: 0 auto;">
+        <img id="scoreboardTitle" src="graphics/gridgolf.png" style="width:100%;">
+        <table id="scoreTable" style="display:none;">
             <thead>
                 <tr>
-                    <th>Hole</th>
-                    <th>Score</th>
+                    <th id="scoreboardHoleLabel">Hole</th>
+                    <th id="scoreboardStrokesLabel">Strokes</th>
                 </tr>
             </thead>
             <tbody>
@@ -113,20 +129,20 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td>Total</td>
+                    <td id="totalLabel">Total</td>
                     <td id="totalScore"></td>
                 </tr>
             </tfoot>
         </table>
-        <table id="optionsMenu" style="display: none;">
+        <table id="settingsMenu" style="display: none;">
             <tr>
-                <td>Name</td>
+                <td id="playerNameLabel">Name</td>
                 <td>
                     <input id="playerNameInput" type="text" id="playerName" onkeyup="setPlayerName(this.value)">
                 </td>
             </tr>
             <tr>
-                <td>Music</td>
+                <td id="musicLabel">Music</td>
                 <td>
                     <label class="switch">
                         <input type="checkbox" id="musicToggle" onclick="toggleMusic()">
@@ -135,7 +151,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Dice sound</td>
+                <td id="diceSoundLabel">Dice sound</td>
                 <td>
                     <label class="switch">
                         <input type="checkbox" id="diceSoundToggle" onclick="toggleDiceSound()">
@@ -144,7 +160,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Sounds</td>
+                <td id="soundsLabel">Sounds</td>
                 <td>
                     <label class="switch">
                         <input type="checkbox" id="soundsToggle" onclick="toggleSounds()">
@@ -154,11 +170,13 @@
             </tr>
         </table>
         <div style="text-align: center;">
-            <button id="newGameButton" style="width:20vh" onclick="startNewGame()">New Game</button>
-            <button id="nextHoleButton" style="width:20vh; display: none;" onclick="nextHole()">Next Hole</button>
-            <button id="optionsButton" style="width:20vh" onclick="showOptions()">Options</button>
-            <button id="saveOptionsButton" style="width:20vh; display: none;" onclick="saveOptions()">Save</button>
-            <button id="backToEditorButton" style="width:20vh; display: none; display:none;" onclick="location.href='editor.html'">Editor</button>
+            <button id="newGameButton" class="button" onclick="startNewGame()">New Game</button>
+            <button id="nextHoleButton" class="button" style="display: none;" onclick="nextHole()">Next Hole</button>
+            <button id="settingsButton" class="button" onclick="showSettings()">Settings</button>
+            <button id="helpButton" class="button" onclick="showHelp()">Help</button>
+            <button id="saveSettingsButton" class="button" style="display: none;" onclick="saveSettings()">Save</button>
+            <button id="backToEditorButton" class="button" style="display:none;" onclick="location.href='editor.html'">Back to editor</button>
+            <button id="abandonGameButton" class="button" style="display:none;" onclick="abandonGame()">Abandon Game</button>
         </div>
     </div>
     <audio id="soundDriver" preload="auto">

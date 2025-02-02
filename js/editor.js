@@ -82,6 +82,12 @@ function handleMouseDown(event) {
     const gridY = Math.floor(mouseY / gridSize);
 
     if (gridX >= 0 && gridX < courseWidth && gridY >= 0 && gridY < courseHeight) {
+        if (selectedMode === GroundType.Hole && course.holeX>0 && course.holeY>0) {
+            course.courseData[course.holeX][course.holeY].type = GroundType.Rough;
+        }
+        if (selectedMode === GroundType.Tee && course.teeX>0 && course.teeY>0) {
+            course.courseData[course.teeX][course.teeY].type = GroundType.Rough;
+        }
         course.courseData[gridX][gridY].type = selectedMode;
     }
     course.draw(ctx);

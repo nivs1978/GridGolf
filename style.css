@@ -11,6 +11,14 @@ body, html {
 
 canvas {
     display: block;
+    margin: 0 auto; /* Center the canvas horizontally */
+}
+
+.gameContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
 .gameDetails {
@@ -34,15 +42,12 @@ canvas {
     color: white;
     text-align: center;
     width: 40vh;
-    text-align: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .menu table {
-    width: 20vh;
-    margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center; /* Center align the table content */
+    margin: auto;
 }
 
 .menu th, .menu td {
@@ -50,12 +55,13 @@ canvas {
     border: 1px solid white;
 }
 
-.menu button {
+.button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
     display: block;
-    margin: 10px auto; /* Center align the buttons */
+    margin: 10px auto;
+    width: 20vh;
 }
 
 .switch {
@@ -101,4 +107,18 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     transform: translateX(14px);
+}
+
+.help {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    width: 40vh;
+    text-align: center;
 }

@@ -1,13 +1,7 @@
 /*
 todo list:
-
-1. Handle overwrite hole in editor
-2. Make it unable to save a course without a tee or hole
-5. Ensure next hole button is not visible in options menu
-4. Helping bubbles to explain ui, and first time things happens, like first time landing on different terrain
-5. Options where music, dice or all sounds can be disabled
-6. A way to restart the game
-
+- Make it unable to save a course without a tee or hole
+- Helping bubbles to explain ui, and first time things happens, like first time landing on different terrain
 */
 const courseWidth = 16;
 const courseHeight = 32;
@@ -33,11 +27,12 @@ let bufferCtx = bufferCanvas.getContext('2d');
 let dice = null;
 let animatedBackground = null;
 
-let options = new Options();
+let settings = new Settings();
 
 let testingFromEditor = false;
 let inGame = false;
 
+let language = null;
 
 function isSafari() {
     var is_safari = navigator.userAgent.toLowerCase().indexOf('safari/') > -1;
@@ -120,6 +115,7 @@ function updateScoreboard() {
     scoreTableBody.innerHTML = '';
 
     let sum = 0;
+    let count=0;
     scores.forEach((score, index) => {
         const row = scoreTableBody.insertRow();
         const cell1 = row.insertCell(0);
@@ -127,33 +123,64 @@ function updateScoreboard() {
         cell1.innerHTML = index + 1;
         cell2.innerHTML = score;
         sum += score;
+        count++;
     });
+
+    while (count < 9) {
+        const row = scoreTableBody.insertRow();
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        cell1.innerHTML = count + 1;
+        cell2.innerHTML = "&nbsp;";
+        count++
+    }
 
     totalScore.innerHTML = sum;
 }
 
-function showOptions() {
+function showSettings() {
     newGameButton.style.display = 'none';
-    optionsButton.style.display = 'none';
+    settingsButton.style.display = 'none';
     backToEditorButton.style.display = 'none';
     nextHoleButton.style.display = 'none';
     scoreTable.style.display = 'none';
-    optionsMenu.style.display = 'table';
-    saveOptionsButton.style.display = 'block';
+    helpButton.style.display = 'none';
+    settingsMenu.style.display = 'table';
+    saveSettingsButton.style.display = 'block';
+    abandonGameButton.style.display = 'none';
 }
 
-function saveOptions() {
-    options.save();
-    optionsMenu.style.display = 'none';
-    saveOptionsButton.style.display = 'none';
+function showHelp() {
+    menu.style.display = 'none';
+    helpMenu.style.display = 'block';
+}
+
+function hideHelp() {
+    helpMenu.style.display = 'none';
+    menu.style.display = 'block';
+}
+
+function hideInstall()
+{
+    installPwa.style.display = 'none';
+    menu.style.display = 'block';
+    localStorage.setItem("installinstructions", "true");
+}
+
+function saveSettings() {
+    settings.save();
+    settingsMenu.style.display = 'none';
+    saveSettingsButton.style.display = 'none';
     newGameButton.style.display = 'block';
-    optionsButton.style.display = 'block';
+    settingsButton.style.display = 'block';
+    helpButton.style.display = 'block';
     if (testingFromEditor) {
         backToEditorButton.style.display = 'block';
     }
     if (inGame) {
         nextHoleButton.style.display = 'block';
-        scoreTable.style.display = 'block';
+        scoreTable.style.display = '';
+        abandonGameButton.style.display = 'block';
     }
 }
 
@@ -163,7 +190,7 @@ function showMenu() {
 
 function showScoreboard() {
     menu.style.display = 'block';
-    scoreTable.style.display = 'block';
+    scoreTable.style.display = '';
     updateScoreboard();
 }
 
@@ -171,12 +198,35 @@ function closeMenu() {
     menu.style.display = 'none';
 }
 
+function abandonGame() {
+    abandonGameButton.style.display = 'none';
+    nextHoleButton.style.display = 'none';
+    scoreTable.style.display = 'none';
+    newGameButton.style.display = 'block';
+    helpButton.style.display = 'block';
+}
+
+function gameOverButtons()
+{
+    nextHoleButton.style.display = 'none';
+    abandonGameButton.style.display = 'none';
+    newGameButton.style.display = 'block';
+    settingsButton.style.display = 'block';
+    helpButton.style.display = 'block';
+}
+
+function nextHoleButtons() {
+    newGameButton.style.display = 'none';
+    nextHoleButton.style.display = 'block';
+    abandonGameButton.style.display = 'block';
+}
+
 function nextStroke() {
     iconDriver.style.display = 'none';
     iconIron.style.display = 'none';
     iconWedge.style.display = 'none';
     iconPutter.style.display = 'none';
-    if (options.sounds && options.diceSound)
+    if (settings.sounds && settings.diceSound)
     {
         soundDice.play();
     }
@@ -209,7 +259,7 @@ function nextStroke() {
     }
     validMoves = course.getValidMoves(ballX, ballY, value);
     if (validMoves.length === 0) {
-        if (options.sounds) {
+        if (settings.sounds) {
             soundSwoosh.play();
         }
         setTimeout(() => { nextStroke(); }, 500);
@@ -258,24 +308,25 @@ function animateBall(startX, startY, endX, endY, duration) {
             course.draw(bufferCtx);
             ctx.drawImage(bufferCanvas, 0, 0);
             if (ballX === holeX && ballY === holeY) {
-                if (options.sounds) {
+                if (settings.sounds) {
                     soundHole.play();
                 }
                 validMoves = [];
                 scores.push(strokeNo);
-                if (holeNo>=courses.length) {
-                    nextHoleButton.style.display = 'none';
-                    inGame = false;
-                } else {
-                    nextHoleButton.style.display = 'block';
-                }
                 showIntro();
                 showMenu();
                 showScoreboard();
-                newGameButton.style.display = 'block';
-                optionsButton.style.display = 'block';
+                if (holeNo>=courses.length) {
+                    inGame = false;
+                    gameOverButtons();
+                } else {
+                    nextHoleButtons();
+                }
+                settingsButton.style.display = 'block';
                 if (testingFromEditor) {
                     backToEditorButton.style.display = 'block';
+                    nextHoleButton.style.display = 'none';
+                    abandonGameButton.style.display = 'none';
                 }
             } else {
                 setTimeout(() => { nextStroke(); }, 600);
@@ -300,7 +351,7 @@ function handleCanvasClick(event) {
     const clickedMove = validMoves.find(move => move.x === gridX && move.y === gridY);
 
     if (clickedMove) {
-        if (options.sounds) {
+        if (settings.sounds) {
             switch (club) {
                 case ClubType.Driver:
                     soundDriver.play();
@@ -320,7 +371,6 @@ function handleCanvasClick(event) {
         clearTimeout(userStrokeTimer);
         animateBall(ballX, ballY, gridX, gridY, 1000);
     }
-    //todo: can we get in a situation with no valid moves, then we perhaps should roll back to previous ball position
 }
 
 function showIntro() {
@@ -334,9 +384,8 @@ function showIntro() {
 function nextHole() {
     animatedBackgroundContainer.style.display = "none";
     newGameButton.style.display = "none";
-    optionsButton.style.display = 'none';
-    saveOptionsButton.style.display = 'none';
-
+    settingsButton.style.display = 'none';
+    saveSettingsButton.style.display = 'none';
     gameDetails.style.display = "block";
     gameDetails.style.width = gameCanvas.width + "px";
     gameInfo.style.display = "block";
@@ -344,6 +393,7 @@ function nextHole() {
     closeMenu();
     holeNo++;
     strokeNo = 1;
+    stroke.innerHTML = strokeNo;
     holeNumber.innerHTML = holeNo;
     animatedBackground.stop();
     gameCanvas.style.display = "block";
@@ -354,6 +404,7 @@ function nextHole() {
 }
 
 function startNewGame() {
+    helpButton.style.display = 'none';
     inGame = true;    
     scores = [];
     holeNo = 0;
@@ -364,11 +415,11 @@ function startNewGame() {
 }
 
 function setPlayerName(name) {
-    options.playerName = name;
+    settings.playerName = name;
 }
 
 function toggleMusic() {
-    options.music = musicToggle.checked;
+    settings.music = musicToggle.checked;
     if (musicToggle.checked) {
         soundMusic.play();
     } else {
@@ -377,14 +428,56 @@ function toggleMusic() {
 }
 
 function toggleDiceSound() {
-    options.diceSound = diceSoundToggle.checked;
+    settings.diceSound = diceSoundToggle.checked;
 }
 
 function toggleSounds() {
-    options.sounds = soundsToggle.checked;
+    settings.sounds = soundsToggle.checked;
+}
+
+function setOsSpecific()
+{
+    if (!/(iPad|iPhone|iPod)/g.test(navigator.userAgent) && !navigator.maxTouchPoints) {
+        // android
+        installPwaText.innerHTML = language.getStr("InstallPwaHTextAndroid");
+    } else {
+        // ios
+        installPwaText.innerHTML = language.getStr("InstallPwaHTextIos");
+    }
+}
+
+function setLanguage()
+{
+    var languageCode = navigator.language.substring(0, 2);
+    language = new Language(languageCode);
+    newGameButton.innerHTML = language.getStr("NewGame");
+    settingsButton.innerHTML = language.getStr("Settings");
+    helpButton.innerHTML = language.getStr("Help");
+    playerNameLabel.innerHTML = language.getStr("Name");
+    musicLabel.innerHTML = language.getStr("Music");
+    diceSoundLabel.innerHTML = language.getStr("DiceSound");
+    soundsLabel.innerHTML = language.getStr("Sounds");
+    saveSettingsButton.innerHTML = language.getStr("Save");
+    helpText1.innerHTML = language.getStr("HelpText1");
+    helpText2.innerHTML = language.getStr("HelpText2");
+    helpText3.innerHTML = language.getStr("HelpText3");
+    installPwaHeadline.innerHTML = language.getStr("InstallPwaHeadline");
+    backToEditorButton.innerHTML = language.getStr("Editor");
+    nextHoleButton.innerHTML = language.getStr("NextHole");
+    abandonGameButton.innerHTML = language.getStr("AbandonGame");
+    holeNumberLabel.innerHTML = language.getStr("Hole");
+    closeHelpButton.innerHTML = language.getStr("Close");
+    playerLabel.innerHTML = language.getStr("Name");
+    scoreboardHoleLabel.innerHTML = language.getStr("Hole");
+    scoreboardStrokesLabel.innerHTML = language.getStr("Strokes");
+    totalLabel.innerHTML = language.getStr("Total");
+    closeInstallButton.innerHTML = language.getStr("Close");
+    strokeLabel.innerHTML = language.getStr("Stroke");
+    setOsSpecific();
 }
 
 function init() {
+    setLanguage();
     ctx = gameCanvas.getContext('2d');
     bufferCtx = bufferCanvas.getContext('2d');
 
@@ -405,21 +498,23 @@ function init() {
     bufferCanvas.height = gameCanvas.height;
 
     showIntro();
-
     clearCanvas();
     
-    player.innerHTML = options.playerName;
-    playerNameInput.value = options.playerName;
-    soundsToggle.checked = options.sounds;
-    diceSoundToggle.checked = options.diceSound;
-    if (options.music) {
+    player.innerHTML = settings.playerName;
+    playerNameInput.value = settings.playerName;
+    soundsToggle.checked = settings.sounds;
+    diceSoundToggle.checked = settings.diceSound;
+    if (settings.music) {
         musicToggle.checked = true;
         var promise = soundMusic.play();
         if (promise !== undefined) {
             promise.then(_ => {
-    
             }).catch(error => {
-                //todo: show how to install PWA
+                let installInstructionsShown = localStorage.getItem("installinstructions");
+                if (!installInstructionsShown) {
+                    menu.style.display = 'none';
+                    installPwa.style.display = 'block';
+                }
             });
         }
     }
